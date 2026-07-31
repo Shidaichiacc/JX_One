@@ -1,0 +1,2 @@
+Ten              Cap   KinhNghiem ThoiGian             LastTick    Trans FNo Faction   
+Shidaichi        200   0          2026-07-25 21:23:01  1785014581  0     9   kunlun    
