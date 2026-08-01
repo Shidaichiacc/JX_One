@@ -1,7 +1,8 @@
 Include("\\script\\gm_tool\\dispose_item.lua")
 Include("\\script\\global\\mel\\configserver.lua")
 --Include("\\script\\global\\mel\\item\\lbadmin.lua")
-Include("\\script\\global\\nobitaxd\\npc\\camnangtanthu.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\monitor.lua")
+Include("\\script\\global\\mel\\item\\camnangdonghanh_test.lua")
 
 ----------------------------------------------------------------------------------------------------
 --										 CÈm Nang §ång Hµnh										  --
@@ -24,7 +25,7 @@ function main(nItemIndex)
     szThongTin = szThongTin..format("<pic=135> <color=green>%-"..nLen.."s<color>: <color=orange>%d", "ChØ sè May M¾n", nMayMan)
     local tbSay = {szThongTin}
 		if ThuNghiemMayChu == 1 then
-			tinsert(tbSay,"Thö NghiÖm M¸y Chñ/StarterGuide_Main")
+			tinsert(tbSay,"Thö NghiÖm M¸y Chñ/StarterGuide_Main")		
 			--tinsert(tbSay, "NhËn Admin/Dailog_Admin")
 		end
 		
@@ -32,11 +33,17 @@ function main(nItemIndex)
 		tinsert(tbSay, "Gi¶i kÑt nh©n vËt/KetAcc")
 		tinsert(tbSay, "Söa lçi ThÇn Hµnh Phï/FixTHP")
 		tinsert(tbSay, "Hñy vËt phÈm/DisposeItem")
+		tinsert(tbSay, "Th«ng Tin Bot/Inforbot")
 		tinsert(tbSay, "KÕt thóc ®èi tho¹i./no")
     CreateTaskSay(tbSay)
     return 1
 end
-
+----------------------------------------------------------------------------------------------------
+--										   Info Bot								  		  --
+----------------------------------------------------------------------------------------------------
+function Inforbot()
+	return SimCityMonitor:Show()
+end
 ----------------------------------------------------------------------------------------------------
 --										   Phi ChiÕn §Êu								  		  --
 ----------------------------------------------------------------------------------------------------

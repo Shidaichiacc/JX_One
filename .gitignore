@@ -3,8 +3,8 @@
 /server1/Logs/
 /server1/itemexchange_setting/rolevalue_log/
 /server1/rolevalueladder_setting/rolevalue_log/
-/server1/data
-/server1/dulieu
+/server1/data/
+/server1/dulieu/
 
 # Logs gateway
 /gateway/Logs/
