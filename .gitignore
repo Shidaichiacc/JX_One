@@ -1,0 +1,15 @@
+
+# Logs server1
+/server1/Logs/
+/server1/itemexchange_setting/rolevalue_log/
+/server1/rolevalueladder_setting/rolevalue_log/
+
+# Logs gateway
+/gateway/Logs/
+/gateway/Backup/
+/gateway/roleback/
+/gateway/rolevalue_setting/rolevalue_log/
+/gateway/s3relay/Logs/
+/gateway/s3relay/relay_log/
+/gateway/s3relay/RelayRunData/
+/gateway/s3relay/roleback/
