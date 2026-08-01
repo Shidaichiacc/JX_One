@@ -606,6 +606,15 @@ function SimCityChienTranh:khaiChienPhongHoaLienThanh()
 	SetMissionV(5, 89)
 	Say("Qu©n ®Þch sÏ b¾t ®Çu c«ng thµnh trong 20 gi©y, c¸c T­íng sÜ h·y s½n sµng!")
 
+	-- FIX: tkWarStarted was never set anywhere, so SimCityCanFight() and
+	-- SimCore:OnTimer() (which both gate on worldInfo.tkWarStarted == 1)
+	-- always treated the war as not started -- bots could never walk or
+	-- fight beyond a single tick, no matter how many times "Khai chien"
+	-- was pressed. The tick_canWalk nudge below was undone on the very
+	-- next tick as a result. Setting this durably fixes both.
+	local worldInfo = SimCityWorld:Get(self.nW)
+	worldInfo.tkWarStarted = 1
+
 	for k, v in SimCitizen.fighterList do
 		if v.nMapId and v.nMapId == self.nW then
 			v.tick_canWalk = 0
@@ -626,6 +635,10 @@ function SimCityChienTranh:khaiChienTongKim()
 		SetMissionV(1,2);
 		BT_SetData( 46, GetGameTime() )
 		PutMessage("§Þch qu©n ®· b¾t ®Çu hµnh ®éng! C¸c chiÕn sÜ! X«ng lªn!")
+
+		-- FIX: same tkWarStarted wiring bug as khaiChienPhongHoaLienThanh().
+		local worldInfo = SimCityWorld:Get(self.nW)
+		worldInfo.tkWarStarted = 1
 
 		for k, v in SimCitizen.fighterList do
 			if v.nMapId and v.nMapId == self.nW then
@@ -730,7 +743,11 @@ end
 
 
 function SimCityChienTranh:taoHauDoanh(ngoaitrang)
-	if self:countMapSpawn(self.nW) > 0 then
+	-- FIX: previously only refilled when population was EXACTLY 0, same class
+	-- of bug as SimCityThanhThi:autoCreateNpc() (see plugins/pthanhthi.lua). If
+	-- even one baoDanhTongKim fighter remained, reinforcements could never be
+	-- topped back up as the rest died off. Refill below a threshold instead.
+	if self:countMapSpawn(self.nW) >= (TONGKIM_HAUDOANH_MIN_REFILL or 10) then
 		return 1
 	end
 

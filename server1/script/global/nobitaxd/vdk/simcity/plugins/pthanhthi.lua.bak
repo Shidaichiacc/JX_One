@@ -429,29 +429,6 @@ function SimCityThanhThi:countMap(nW)
 	return counter
 end
 
--- FIX: periodic maintenance pass, independent of onPlayerEnterMap/onPlayerExitMap.
--- autoCreateNpc() only fires once per enter/exit event, so a map with a player
--- staying on it for a long session never got re-checked in between. This scans
--- every occupied map on a fixed timer (see refillLoop in main.lua) and tops up
--- any map whose bot count has dropped below the threshold, so populations no
--- longer only ever shrink over time. Safe to call repeatedly since
--- createNpcSoCapByMap()/processBatches() already self-throttle by live count.
-function SimCityThanhThi:periodicRefillCheck()
-	if self.autoAddThanhThi ~= 1 then
-		return 1
-	end
-	for _, worldInfo in SimCityWorld.data do
-		local wid = worldInfo.worldId
-		if wid and worldInfo.name and worldInfo.name ~= ""
-			and worldInfo.playerTrackerCount and worldInfo.playerTrackerCount >= 1
-			and SimCityWorld:IsTongKimMap(wid) ~= 1
-			and self:countMap(wid) < (THANHTHI_MIN_REFILL or 10) then
-			self:createNpcSoCapByMap(wid)
-		end
-	end
-	return 1
-end
-
 function SimCityThanhThi:onPlayerEnterMap()
 	if SimCity_StartLoops then SimCity_StartLoops() end
 	local nW, pX, pY = GetWorldPos()
@@ -503,14 +480,7 @@ function SimCityThanhThi:autoCreateNpc(nW)
 	if SimCity_StartLoops then SimCity_StartLoops() end
 	local worldInfo = SimCityWorld:Get(nW)
 
-	if (SimCityWorld:IsTongKimMap(nW) ~= 1 and worldInfo.name ~= "" and worldInfo.playerTrackerCount >= 1
-		and self:countMap(nW) < (THANHTHI_MIN_REFILL or 10)) then
-		-- FIX: previously gated on countMap(nW) == 0 (map completely empty). That meant
-		-- as long as even a single fighter remained, the map could never be topped back
-		-- up even after most of its population was gone, so bot count only ever shrank
-		-- over time. Now refills whenever the count drops below a low threshold instead.
-		-- Safe to call repeatedly: processBatches() already stops adding once countMap()
-		-- reaches the size threshold, so this can't overshoot or duplicate bots.
+	if (SimCityWorld:IsTongKimMap(nW) ~= 1 and worldInfo.name ~= "" and worldInfo.playerTrackerCount >= 1 and self:countMap(nW) == 0) then
 		self:createNpcSoCapByMap(nW)
 	end
 

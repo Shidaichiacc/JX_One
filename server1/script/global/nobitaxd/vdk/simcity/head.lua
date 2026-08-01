@@ -29,13 +29,13 @@ Include("\\script\\lib\\string.lua")
 
 -- Common Helpers
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\config.lua")
+Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
 
--- Nap he so gia shop BOT vao vdk.so.
--- Ma lenh 1000+N duoc vdk.so V4 xu ly rieng, khong sua tier/item cua BOT.
+-- SIMCITY V3: nap he so gia shop bot vao vdk.so.
+-- Ma lenh 1000+N chi doi he so gia, khong doi tier/item cua bot.
 if SetBotStallTier and BOT_STALL_PRICE_MULTIPLIER then
     SetBotStallTier(0, 1000 + BOT_STALL_PRICE_MULTIPLIER, 1)
 end
-Include("\\script\\global\\nobitaxd\\vdk\\simcity\\libs\\index.lua")
 
 -- Plugins first
 Include("\\script\\global\\nobitaxd\\vdk\\simcity\\plugins\\index.lua")

@@ -42,7 +42,7 @@ function execCastNormalSkill(self, simInstance, tbNpc)
         return
     end
 
-    if tbNpc.fighting == 0 or (tbNpc.tick_canCast and tbNpc.tick_canCast > tbNpc.tick_breath) then
+    if tbNpc.isFighting ~= 1 or (tbNpc.tick_canCast and tbNpc.tick_canCast > tbNpc.tick_breath) then
         return
     end
 

@@ -745,14 +745,6 @@ function SimBotRecoverStuck(simInstance, tbNpc)
 end
 
 function SimCore:OnTimer(tbNpc, rate)
-
-    -- FIX: RetrySpawn existed but was never called from anywhere, so
-    -- tbNpc.spawnRetryTick (set by sim.entity.lua on a failed respawn) was
-    -- never actually processed. Dispatch it here, before anything else that
-    -- assumes tbNpc.finalIndex is valid.
-    if (not tbNpc.finalIndex or tbNpc.finalIndex <= 0) and tbNpc.isDead ~= 1 and tbNpc.spawnRetryTick then
-        return self:RetrySpawn(tbNpc, rate)
-    end
   
     if (tbNpc.bangKeoxe and SetNpcBang and tbNpc.isDead ~= 1 and tbNpc.finalIndex and tbNpc.finalIndex > 0) then
         tbNpc.bangBcN = (tbNpc.bangBcN or 0) + 1
@@ -1068,30 +1060,6 @@ function SimCore:OnTimer(tbNpc, rate)
         tbNpc.fightSys:Update(self, tbNpc)
     end
 
-end
-
--- [NEW FEATURE] Safety-net sweep: removes any fighter left in a state that
--- should never legitimately persist -- no valid finalIndex, not marked dead,
--- and no pending spawn retry (SimCore:RetrySpawn). Every known death/respawn
--- path (entitySys.OnDeath, entitySys.Respawn, SimBotRecoverStuck) always
--- leaves a fighter in one of: alive with a valid finalIndex, isDead==1
--- waiting to revive, or spawnRetryTick set waiting for RetrySpawn. Landing
--- outside all three means some code path failed to clean up after itself --
--- exactly the class of bug already found and fixed this session (a bot that
--- silently vanishes from the map but keeps being ticked forever). Call this
--- periodically (see refillLoop in main.lua) rather than every tick, since it
--- is a diagnostic safety net, not part of the normal lifecycle.
-function SimCore:SweepStaleGhosts()
-    local swept = 0
-    for id, fighter in self.fighterList do
-        if (not fighter.finalIndex or fighter.finalIndex <= 0)
-           and fighter.isDead ~= 1
-           and not fighter.spawnRetryTick then
-            self:Remove(id)
-            swept = swept + 1
-        end
-    end
-    return swept
 end
 
 function SimCore:ATick(rate)       

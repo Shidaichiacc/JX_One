@@ -186,7 +186,7 @@ function loadMap()
         if fileType == "preset" then
             local foundWalkMap = SimCityTableFromFile(mapPath.. filePath, {"*w", "*w"})
 
-            allPaths = {}
+            local allPaths = {}
             for i=1, getn(foundWalkMap) do
                 local pathName = foundWalkMap[i][1]
                 local nodeName = foundWalkMap[i][2]

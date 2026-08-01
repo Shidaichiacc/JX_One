@@ -19,11 +19,21 @@ function worldLoop(nParam)
     AddTimer(REFRESH_RATE*3, "worldLoop", 0)
 end 
 
+-- FIX: periodic bot top-up loop, independent of player enter/exit events.
+-- See SimCityThanhThi:periodicRefillCheck() in plugins/pthanhthi.lua.
+function refillLoop(nParam)
+    SimCityThanhThi:periodicRefillCheck()
+    SimCitizen:SweepStaleGhosts()   -- [NEW FEATURE] safety-net cleanup, see components/sim.core.lua
+    SimTheoSau:SweepStaleGhosts()
+    AddTimer(THANHTHI_REFILL_INTERVAL_TICKS or (90*18), "refillLoop", 0)
+end
+
 function SimCity_StartLoops()
     if SIMCITY_LOOP_STARTED == 1 then return 1 end
     SIMCITY_LOOP_STARTED = 1
     AddTimer(REFRESH_RATE, "mainLoop", 0)
     AddTimer(REFRESH_RATE*3, "worldLoop", 0)
+    AddTimer(THANHTHI_REFILL_INTERVAL_TICKS or (90*18), "refillLoop", 0)   -- FIX: periodic bot top-up
     print("[SIMLIFE] loops started")
     return 1
 end

@@ -95,7 +95,7 @@ function DelNpcSafe(nNpcIndex)
         return
     end
 
-    local PIdx = NpcIdx2PIdx(nNpcIndex)
+    PIdx = NpcIdx2PIdx(nNpcIndex)
     if (PIdx > 0) then
         return
     end

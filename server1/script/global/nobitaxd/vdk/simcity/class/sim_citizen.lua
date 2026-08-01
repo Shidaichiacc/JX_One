@@ -60,13 +60,31 @@ function SimCitizen:New(fighter)
 
     -- Setup walk paths
     if tbNpc.movementSys:resetPos(self, nListId) == 0 then
+        -- FIX: tbNpc was already stored in self.fighterList[nListId] above.
+        -- Returning nil here without cleanup used to leave a permanent "ghost"
+        -- entry: never removed, still scanned every ATick, id never recycled.
+        self.fighterList[nListId] = nil
+        tinsert(self.removedIds, nListId)
+        self.totalFighters = self.totalFighters - 1
         return nil
     end
 
     -- Create the character on screen
     local canCreate = tbNpc.entitySys:CreateChar(self, tbNpc, 1, tbNpc.goX32, tbNpc.goY32)
     if canCreate == 0 then
-        return nil
+        -- FIX: previously any CreateChar failure during initial spawn (e.g. the
+        -- engine momentarily out of NPC slots while a mass-spawn loop like Tong
+        -- Kim's taoNV/taodoi creates hundreds of NPCs back to back) silently
+        -- discarded this fighter forever -- explains bots that intermittently
+        -- never appear. Hand off to the same SimCore:RetrySpawn mechanism used
+        -- for failed respawns instead of giving up after a single attempt.
+        -- Note: childrenSetup (escort formation) is skipped for this fighter
+        -- if the retry succeeds later, since it needs the parent's position at
+        -- creation time -- a fighter existing without its formation is a much
+        -- better outcome than not existing at all.
+        tbNpc.spawnRetryCount = 0
+        tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
+        return nListId
     end
 
 
@@ -107,7 +125,9 @@ function SimCitizen:initChildrenConfig(nListId, parentConfig)
             childConfig.goX32 = nX32
             childConfig.goY32 = nY32
             local childId = self:New(childConfig)
-            tinsert(createdChildren, childId)
+            if childId then
+                tinsert(createdChildren, childId)
+            end
         end
 
         tbNpc.children = createdChildren

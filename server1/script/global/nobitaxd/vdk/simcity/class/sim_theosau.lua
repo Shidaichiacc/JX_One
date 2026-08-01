@@ -33,6 +33,9 @@ function SimTheoSau:New(fighter)
 
     -- Setup walk paths
     if tbNpc.movementSys:resetPos(self, nListId) == 0 then
+        -- FIX: same ghost-entry leak as sim_citizen.lua - clean up before returning nil.
+        self.fighterList[nListId] = nil
+        tinsert(self.removedIds, nListId)
         return nil
     end
 
@@ -40,7 +43,14 @@ function SimTheoSau:New(fighter)
     tbNpc.isPlayerFighting = CallPlayerFunction(tbNpc.playerID, GetFightState)
 
     -- Create the character on screen
-    tbNpc.entitySys:CreateChar(self, tbNpc, 1, tbNpc.goX32, tbNpc.goY32)
+    local canCreate = tbNpc.entitySys:CreateChar(self, tbNpc, 1, tbNpc.goX32, tbNpc.goY32)
+    if canCreate == 0 then
+        -- FIX: same as sim_citizen.lua - hand off to SimCore:RetrySpawn instead
+        -- of discarding this fighter forever on a transient CreateChar failure.
+        tbNpc.spawnRetryCount = 0
+        tbNpc.spawnRetryTick = (tbNpc.tick_breath or 0) + (SIMBOT_RESPAWN_RETRY_TICKS or 5*18/REFRESH_RATE)
+        return nListId
+    end
     
     if (SetNpcBang and tbNpc.role == "keoxe" and tbNpc.finalIndex and tbNpc.finalIndex > 0
         and tbNpc.playerID and tbNpc.playerID ~= ""

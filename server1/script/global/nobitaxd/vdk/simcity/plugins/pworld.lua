@@ -184,7 +184,12 @@ end
 
 function SimCityWorld:doShowBXH(mapID)
 	local _wi = self:Get(mapID)
-	if _wi and _wi.tkWarStarted == 0 then   
+	-- FIX: tkWarStarted defaults to nil (unset), not 0 -- nil == 0 is always
+	-- false in Lua, so this check never actually fired before the war-started
+	-- fix in pchientranh.lua (khaiChienTongKim/khaiChienPhongHoaLienThanh) was
+	-- wired up. Use ~= 1 for consistency with every other tkWarStarted check
+	-- in the codebase (libs/common.lua, components/sim.core.lua).
+	if _wi and _wi.tkWarStarted ~= 1 then   
 		if BotLadderClear then BotLadderClear(SubWorldID2Idx(mapID)) end
 		return
 	end

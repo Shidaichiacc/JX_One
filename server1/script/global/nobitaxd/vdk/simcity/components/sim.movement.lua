@@ -449,7 +449,7 @@ SimMovement.Citizen = {
 
 
                     -- Can move as usual
-                    elseif tbNpc.tick_breath > tbNpc.tick_canWalk then
+                    elseif tbNpc.tick_breath >= tbNpc.tick_canWalk then
 
                         -- Trong mode tong kim ma dang o nha thi di tiep
                         if tbNpc.tongkim == 1 
@@ -855,7 +855,7 @@ SimMovement.Citizen = {
                         tbNpc.fightSys:JoinFight(simInstance, tbNpc, "I start a fight")
                     end
 
-                    if countFighting > 0 and tbNpc.worldInfo.showFightingArea == 1 then
+                    if countFighting > 0 and tbNpc.worldInfo.showFightingArea == 0 then
                         Msg2Map(nW,
                             "C„ " .. countFighting .. " nh©n s‹ Æang Æ∏nh nhau tπi " .. tbNpc.worldInfo.name ..
                             " <color=yellow>" .. floor(myPosX / 8) .. " " .. floor(myPosY / 16) .. "<color>")
@@ -925,8 +925,10 @@ SimMovement.Citizen = {
             tbNpc.tick_checklag = nil
         else
             if not tbNpc.tick_checklag then
-                tbNpc.tick_checklag = tbNpc.tick_breath +
-                    30*18/REFRESH_RATE -- check again in 30s, if still at same position, respawn because this is stuck
+                tbNpc.tick_checklag = tbNpc.tick_breath + (SIMBOT_STUCK_CHECK_TICKS or 30*18/REFRESH_RATE)
+                local sx, sy = GetNpcPos(tbNpc.finalIndex)
+                tbNpc.stuckWatchX = sx
+                tbNpc.stuckWatchY = sy
             end
         end
 
