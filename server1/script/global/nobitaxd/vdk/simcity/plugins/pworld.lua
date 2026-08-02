@@ -232,7 +232,7 @@ function SimCityWorld:IsTongKimMap(nMapID)
 end
 
 function SimCityWorld:IsThanhThiMap(pW)
-	if pW == 37 or pW == 78 or pW == 176 or pW == 162 or pW == 80 or pW == 1 or pW == 11 then
+	if pW == 37 or pW == 78 or pW == 176 or pW == 162 or pW == 80 or pW == 1 or pW == 11 or pW == 1010 then
 		return 1
 	end
 	return 0

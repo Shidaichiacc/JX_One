@@ -213,3 +213,16 @@ worldId	worldName	pX	pY	description	npcId
 11	Noname	3093	5146	R­¬ng chøa ®å	1
 11	Noname	3146	5067	D· TÈu	1
 80	Noname	1797	3169	R­¬ng chøa ®å	203
+1010	Hoi Quan Vo Lam	1644	3344	Vo Lam Truyen Nhan	1
+1010	Hoi Quan Vo Lam	1587	3320	Khu NPC Nang Cap	1
+1010	Hoi Quan Vo Lam	1647	3374	Ruong Chua Do	1
+1010	Hoi Quan Vo Lam	1679	3343	Khu Trung Tam	1
+1010	Hoi Quan Vo Lam	1660	3387	D· TÈu	1
+1010	Hoi Quan Vo Lam	1654	3348	Nhiep Thi Tran	1
+1010	Hoi Quan Vo Lam	1669	3428	Tien Trang	1
+1010	Hoi Quan Vo Lam	1602	3402	Xa Phu	1
+1010	Hoi Quan Vo Lam	1616	3378	Khu NPC Nguyen Lieu	1
+1010	Hoi Quan Vo Lam	1739	3373	Khu NPC Mon Phai	1
+1010	Hoi Quan Vo Lam	1762	3445	NPC Hieu Thuoc	203
+1010	Hoi Quan Vo Lam	1747	3482	NPC Tho Ren	1
+1010	Hoi Quan Vo Lam	1794	3432	NPC Ben Tau	1

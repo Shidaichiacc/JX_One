@@ -274,3 +274,5 @@ WorldID	WorldName	PathFile	Type
 10000	tongkim_nguyensoai	thanhthi\10000_tongkim_nguyensoai_preset.txt	preset
 518	Bao Danh Phong Hoa Lien Thanh	thanhthi\518_baodanh_phonghoa_preset.txt	preset
 519	Bao Danh Phong Hoa Lien Thanh	thanhthi\519_baodanh_phonghoakim_preset.txt	preset
+1010	Hoi Quan Vo Lam	thanhthi\1010_hoiquanvolam_nodes.txt	nodes
+1010	Hoi Quan Vo Lam	thanhthi\1010_hoiquanvolam_preset.txt	preset
